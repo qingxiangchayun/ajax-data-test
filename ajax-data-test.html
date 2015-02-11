@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>ajax-data-test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+<meta name="author" content="lyuan">
+<link rel="icon" href="/img/favicon.ico">
+<link rel='stylesheet' href='css/bootstrap.css' />
+
+<style type="text/css">
+ul,li{list-style:none;}
+.header{padding:30px;background:#eee;text-align:center;}
+.header h1{margin:0 0 10px 0;}
+.header h2{font-size:24px;color:#555;}
+
+.section{padding:20px 200px;}
+.section-config{background:#bdc3c7;}
+.section-params{background:#eee;}
+.section-config h3{margin:0;}
+
+.section-params li{margin-bottom:10px;}
+.section-params input{display:inline}
+.section-params input[type="text"]{width:300px;margin-right:20px;}
+
+</style>
+</head>
+<body>
+<header class="header">
+	<h1>数据接口测试工具</h1>
+	<h2>编写稳定、高质量的后端数据接口。</h2>
+</header>
+
+<section class="section section-config clearfix" id="J_main">
+	<h3>请求配置</h3>
+	<ul>
+		<li><span>url</span> <input type="text" value="" /><input type="text" value="" /></li>
+		<li><span>type</span> <input type="radio" value="" /> <input type="radio" value="" /></li>
+	</ul>
+</section>
+<section class="section section-params clearfix" id="J_main">
+	<h3>参数设置</h3>
+	<ul class="params-wrap">
+		<li>
+			<input type="text" value="" class="key form-control" placeholder="key" /> 
+			<input type="text" value="" class="key form-control" placeholder="value" />
+			<input type="checkbox" value="" checked />
+		</li>
+		<li>
+			<input type="text" value="" class="key form-control" placeholder="key" /> 
+			<input type="text" value="" class="key form-control" placeholder="value" />
+			<input type="checkbox" value="" checked />
+		</li>
+		<li>
+			<input type="text" value="" class="key form-control" placeholder="key" /> 
+			<input type="text" value="" class="key form-control" placeholder="value" />
+			<input type="checkbox" value="" checked />
+		</li>
+		
+	</ul>
+</section>
+
+
+
+
+<script src="js/jquery-2.1.0.min.js"></script>
+
+<script>
+$(function(){
+	'use strict';
+	
+	$.ajax({
+
+	});
+
+});
+
+
+
+</script>
+
+</body>
+</html>
