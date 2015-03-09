@@ -118,6 +118,7 @@ $(function(){
 		data : {}
 	};
 
+	// 验证接口
 	$('#J_data_validate').on('click',function(){
 
 
@@ -163,6 +164,20 @@ $(function(){
 
 
 	});
+
+	// 获取本地保存的数据
+	var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
+
+	if(pageData){
+		$('.section-config input[name="url"]').val(pageData.url);
+		$('.section-config input[name="dataType"]').val(pageData.dataType);
+
+		if(pageData.type === 'GET'){
+			$('.section-config .sc-type input').eq(0).prop('checked',true);
+		}else{
+			$('.section-config .sc-type input').eq(1).prop('checked',true);
+		}
+	}
 	
 
 });
