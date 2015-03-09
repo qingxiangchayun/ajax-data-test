@@ -30,32 +30,54 @@ ul,li{list-style:none;}
 
 .section-params li{margin-bottom:10px;}
 .section-params input[type="text"]{width:300px;margin-right:20px;}
+.params-wrap-single{float:left;}
+.params-wrap-multiple{float:left;margin-left:30px;}
+
+.section-action{background:#efe;}
 
 </style>
 </head>
 <body>
 <header class="header">
 	<h1>数据接口测试工具</h1>
-	<h2>编写稳定、高质量的后端数据接口。</h2>
+	<h2>编写稳定、高质量的后端数据接口</h2>
 </header>
 
-<section class="section section-config clearfix" id="J_main">
+<section class="section section-config clearfix">
 	<h3>请求配置</h3>
 	<ul>
-		<li><span>url</span> <input type="text" value="" class="form-control" /> <input type="text" value="" class="form-control" /></li>
-		<li>
+		<li><span>url</span> <input type="text" name="url" value="" class="form-control" /></li>
+		<li><span>dataType</span> <input type="text" name="dataType" value="" class="form-control" /></li>
+		<li class="sc-type">
 			<span>type</span> 
-			<label>GET<input type="radio" value="" name="type" /></label>
-			<label>POST<input type="radio" value="" name="type" /></label>
+			<label>GET<input type="radio" value="GET" name="type" /></label>
+			<label>POST<input type="radio" value="POST" name="type" /></label>
 		</li>
 	</ul>
 </section>
-<section class="section section-params clearfix" id="J_main">
+<section class="section section-params clearfix">
 	<h3>参数设置</h3>
-	<ul class="params-wrap">
+	<ul class="params-wrap params-wrap-single">
 		<li>
 			<input type="text" value="" class="key form-control" placeholder="key" /> 
-			<input type="text" value="" class="key form-control" placeholder="value" />
+			<input type="text" value="" class="value form-control" placeholder="value" />
+			<input type="checkbox" value=""  checked />
+		</li>
+		<li>
+			<input type="text" value="" class="key form-control" placeholder="key" /> 
+			<input type="text" value="" class="value form-control" placeholder="value" />
+			<input type="checkbox" value="" checked />
+		</li>
+		<li>
+			<input type="text" value="" class="key form-control" placeholder="key" /> 
+			<input type="text" value="" class="value form-control" placeholder="value" />
+			<input type="checkbox" value="" checked />
+		</li>
+		
+	</ul>
+	<ul class="params-wrap params-wrap-multiple">
+		<li>
+			<input type="text" value="" class="key form-control" placeholder="key" /> 
 			<input type="checkbox" value="" checked />
 		</li>
 		<li>
@@ -71,7 +93,10 @@ ul,li{list-style:none;}
 		
 	</ul>
 </section>
-
+<section class="section section-action">
+	<h3>操作</h3>
+	<button id="J_data_validate" class="btn btn-primary" type="button">确定</button>
+</section>
 
 
 
@@ -80,10 +105,46 @@ ul,li{list-style:none;}
 <script>
 $(function(){
 	'use strict';
-	
-	$.ajax({
+
+	var localStorageData = {
+		url : '',
+		type : 'GET',
+		dataType : '',
+		data : {}
+	};
+
+	$('#J_data_validate').on('click',function(){
+
+		
+		localStorageData.url = $('.section-config input[name="url"]').val();
+		localStorageData.type = $('.section-config .sc-type input:checked').val();
+		localStorageData.dataType = $('.section-config input[name="dataType"]').val();
+
+		$('.params-wrap-single li').each(function(){
+			var $this = $(this);
+			var key,value;
+
+			if($this.find('input[type="checkbox"]').prop('checked')){
+				key = $this.find('.key').val();
+				value = $this.find('.value').val();
+
+				localStorageData.data[key] = value;
+			}
+
+		});
+
+		// 数据写到 localStorage上
+		window.localStorage.setItem('ajax-data-test',localStorageData);
+
+		this.pms = $.ajax(localStorageData);
+
+		this.pms.done(function(){
+			alert('ok');
+		});
+
 
 	});
+	
 
 });
 
