@@ -20,13 +20,14 @@ ul,li{list-style:none;}
 .section-config{background:#bdc3c7;}
 .section-config input[type="text"]{width:500px;margin-right:20px;}
 .section-config li{margin-bottom:10px;}
-.section-config li span{width:50px;display:inline-block;}
+.section-config li span{width:100px;display:inline-block;}
 .section-config li label{padding-right:20px;}
 .section-config li label input{margin-left:5px;}
 
 
 
 .section-params{background:#eee;}
+.section-params h4{text-align:center;}
 
 .section-params li{margin-bottom:10px;}
 .section-params input[type="text"]{width:300px;margin-right:20px;}
@@ -57,41 +58,45 @@ ul,li{list-style:none;}
 </section>
 <section class="section section-params clearfix">
 	<h3>参数设置</h3>
-	<ul class="params-wrap params-wrap-single">
-		<li>
-			<input type="text" value="" class="key form-control" placeholder="key" /> 
-			<input type="text" value="" class="value form-control" placeholder="value" />
-			<input type="checkbox" value=""  checked />
-		</li>
-		<li>
-			<input type="text" value="" class="key form-control" placeholder="key" /> 
-			<input type="text" value="" class="value form-control" placeholder="value" />
-			<input type="checkbox" value="" checked />
-		</li>
-		<li>
-			<input type="text" value="" class="key form-control" placeholder="key" /> 
-			<input type="text" value="" class="value form-control" placeholder="value" />
-			<input type="checkbox" value="" checked />
-		</li>
-		
-	</ul>
-	<ul class="params-wrap params-wrap-multiple">
-		<li>
-			<input type="text" value="" class="key form-control" placeholder="key" /> 
-			<input type="checkbox" value="" checked />
-		</li>
-		<li>
-			<input type="text" value="" class="key form-control" placeholder="key" /> 
-			<input type="text" value="" class="key form-control" placeholder="value" />
-			<input type="checkbox" value="" checked />
-		</li>
-		<li>
-			<input type="text" value="" class="key form-control" placeholder="key" /> 
-			<input type="text" value="" class="key form-control" placeholder="value" />
-			<input type="checkbox" value="" checked />
-		</li>
-		
-	</ul>
+	<div class="params-wrap params-wrap-single">
+		<h4>简单值：orgId:123, courseId:456</h4>
+		<ul>
+			<li>
+				<input type="text" value="" class="key form-control" placeholder="key" /> 
+				<input type="text" value="" class="value form-control" placeholder="value" />
+				<input type="checkbox" value=""  checked />
+			</li>
+			<li>
+				<input type="text" value="" class="key form-control" placeholder="key" /> 
+				<input type="text" value="" class="value form-control" placeholder="value" />
+				<input type="checkbox" value="" checked />
+			</li>
+			<li>
+				<input type="text" value="" class="key form-control" placeholder="key" /> 
+				<input type="text" value="" class="value form-control" placeholder="value" />
+				<input type="checkbox" value="" checked />
+			</li>
+		</ul>
+	</div>
+	<div class="params-wrap params-wrap-multiple">
+		<h4>复杂值：jsonStr: [{courseId:123, coursePic:a.jpg, coursePrice:1}]</h4>
+		<ul>
+			<li>
+				<input type="text" value="" class="key form-control" placeholder="key" /> 
+				<input type="checkbox" value="" checked />
+			</li>
+			<li>
+				<input type="text" value="" class="key form-control" placeholder="key" /> 
+				<input type="text" value="" class="key form-control" placeholder="value" />
+				<input type="checkbox" value="" checked />
+			</li>
+			<li>
+				<input type="text" value="" class="key form-control" placeholder="key" /> 
+				<input type="text" value="" class="key form-control" placeholder="value" />
+				<input type="checkbox" value="" checked />
+			</li>
+		</ul>
+	</div>
 </section>
 <section class="section section-action">
 	<h3>操作</h3>
@@ -115,7 +120,7 @@ $(function(){
 
 	$('#J_data_validate').on('click',function(){
 
-		
+
 		localStorageData.url = $('.section-config input[name="url"]').val();
 		localStorageData.type = $('.section-config .sc-type input:checked').val();
 		localStorageData.dataType = $('.section-config input[name="dataType"]').val();
@@ -133,8 +138,22 @@ $(function(){
 
 		});
 
+		$('.params-wrap-multiple li').each(function(){
+			var $this = $(this);
+			var key,value,obj;
+			var arr = [];
+
+			if($this.find('input[type="checkbox"]').prop('checked')){
+				key = $this.find('.key').val();
+				value = $this.find('.value').val();
+
+				localStorageData.data[key] = value;
+			}
+
+		});
+
 		// 数据写到 localStorage上
-		window.localStorage.setItem('ajax-data-test',localStorageData);
+		window.localStorage.setItem('ajax-data-test',JSON.stringify(localStorageData));
 
 		this.pms = $.ajax(localStorageData);
 
