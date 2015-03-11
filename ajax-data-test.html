@@ -81,18 +81,18 @@ ul,li{list-style:none;}
 	<div class="params-wrap params-wrap-multiple">
 		<h4>复杂值：jsonStr: [{courseId:123, coursePic:a.jpg, coursePrice:1}]</h4>
 		<ul>
-			<li>
+			<li class="multiple-key-list">
 				<input type="text" value="" class="key form-control" placeholder="key" /> 
 				<input type="checkbox" value="" checked />
 			</li>
-			<li>
+			<li class="list">
 				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="text" value="" class="key form-control" placeholder="value" />
+				<input type="text" value="" class="value form-control" placeholder="value" />
 				<input type="checkbox" value="" checked />
 			</li>
-			<li>
+			<li class="list">
 				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="text" value="" class="key form-control" placeholder="value" />
+				<input type="text" value="" class="value form-control" placeholder="value" />
 				<input type="checkbox" value="" checked />
 			</li>
 		</ul>
@@ -115,7 +115,9 @@ $(function(){
 		url : '',
 		type : 'GET',
 		dataType : '',
-		data : {}
+		data : {
+			multipleKeyName : [] // 将复杂值存到multipleKeyName下 
+		}
 	};
 
 	// 验证接口
@@ -139,17 +141,30 @@ $(function(){
 
 		});
 
-		$('.params-wrap-multiple li').each(function(){
+		
+		// 真实的multipleKeyName值
+		var multipleKeyName = $('.params-wrap-multiple .multiple-key-list .key').val();
+		var arr = [];
+		$('.params-wrap-multiple .list').each(function(){
 			var $this = $(this);
-			var key,value,obj;
-			var arr = [];
+			var key,value;
+			var obj = {};
 
-			if($this.find('input[type="checkbox"]').prop('checked')){
+
+			//if($this.find('input[type="checkbox"]').prop('checked')){
 				key = $this.find('.key').val();
 				value = $this.find('.value').val();
 
-				localStorageData.data[key] = value;
-			}
+				obj[key] = value;
+				arr.push(obj);
+
+				console.log(arr)
+				// 发送ajax 的复杂数据放到 localStorageData[multipleKeyName]
+				localStorageData[multipleKeyName] = JSON.stringify(arr); 
+
+				// 存储数据
+				localStorageData.data.multipleKeyName = JSON.stringify(arr);
+			//}
 
 		});
 
@@ -167,6 +182,8 @@ $(function(){
 
 	// 获取本地保存的数据
 	var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
+	console.log(pageData);
+
 
 	if(pageData){
 		$('.section-config input[name="url"]').val(pageData.url);
