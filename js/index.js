@@ -3,7 +3,7 @@
  *
  */
 
-require(['jquery-2.1.0.min','jquery.tmpl'], function($) {
+require(['jquery','jquery.tmpl'], function($) {
 
 	'use strict';
 
