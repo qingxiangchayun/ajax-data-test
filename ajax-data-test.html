@@ -26,9 +26,10 @@ ul,li{list-style:none;}
 
 
 
-.section-params{background:#eee;}
+.section-params{min-height:230px;background:#eee;}
 .section-params h4{text-align:center;}
 
+.section-params .params-wrap{width:700px;}
 .section-params li{margin-bottom:10px;}
 .section-params input[type="text"]{width:300px;margin-right:20px;}
 .params-wrap-single{float:left;}
@@ -60,39 +61,13 @@ ul,li{list-style:none;}
 	<h3>参数设置</h3>
 	<div class="params-wrap params-wrap-single">
 		<h4>简单值：orgId:123, courseId:456</h4>
-		<ul>
-			<li>
-				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="text" value="" class="value form-control" placeholder="value" />
-				<input type="checkbox" value=""  checked />
-			</li>
-			<li>
-				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="text" value="" class="value form-control" placeholder="value" />
-				<input type="checkbox" value="" checked />
-			</li>
-			<li>
-				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="text" value="" class="value form-control" placeholder="value" />
-				<input type="checkbox" value="" checked />
-			</li>
-		</ul>
+		<ul></ul>
 	</div>
 	<div class="params-wrap params-wrap-multiple">
 		<h4>复杂值：jsonStr: [{courseId:123, coursePic:a.jpg, coursePrice:1}]</h4>
 		<ul>
 			<li class="multiple-key-list">
 				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="checkbox" value="" checked />
-			</li>
-			<li class="list">
-				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="text" value="" class="value form-control" placeholder="value" />
-				<input type="checkbox" value="" checked />
-			</li>
-			<li class="list">
-				<input type="text" value="" class="key form-control" placeholder="key" /> 
-				<input type="text" value="" class="value form-control" placeholder="value" />
 				<input type="checkbox" value="" checked />
 			</li>
 		</ul>

@@ -6,6 +6,8 @@
 require(['jquery','jquery.tmpl'], function($) {
 
 	'use strict';
+	console.time(1)
+	console.time(2)
 
 	// 验证接口
 	$('#J_data_validate').on('click', function() {
@@ -52,12 +54,12 @@ require(['jquery','jquery.tmpl'], function($) {
 				key = $this.find('.key').val();
 
 				if ($.trim(key)) {
-
 					value = $this.find('.value').val();
 
 					ajaxConfig.data[key] = value;
-					obj[key] = value;
-
+					
+					obj.key = key;
+					obj.value = value;
 					storageData.data.singleData.list.push(obj);
 				}
 			}
@@ -77,7 +79,9 @@ require(['jquery','jquery.tmpl'], function($) {
 				if ($.trim(key)) {
 
 					value = $this.find('.value').val();
-					obj[key] = value;
+					
+					obj.key = key;
+					obj.value = value;
 
 					storageData.data.multipleData.list.push(obj);
 					ajaxConfig.data[multipleKeyName] = JSON.stringify(storageData.data.multipleData.list);
@@ -98,12 +102,23 @@ require(['jquery','jquery.tmpl'], function($) {
 
 	});
 
+	console.timeEnd(1)
 
 	var pageLoad = (function() {
 
 		// 获取本地保存的数据
+		console.time(3)
 		var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
-		console.log(pageData);
+		
+		
+
+		var htmlTmpl = [
+			'<li class="list">',
+				'<input type="text" value="${key}" class="key form-control" placeholder="key" />',
+				'<input type="text" value="${value}" class="value form-control" placeholder="value" />',
+				'<input type="checkbox" value="" checked />',
+			'</li>'
+		].join('');
 
 
 		// config 数据
@@ -116,10 +131,17 @@ require(['jquery','jquery.tmpl'], function($) {
 			} else {
 				$('.section-config .sc-type input').eq(1).prop('checked', true);
 			}
+
+			// single data
+			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-single ul');
+			
+
+			// multiple data
+			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-multiple ul');
+
 		}
 
-
 	})();
-
+	console.timeEnd(2)
 
 });
