@@ -154,7 +154,6 @@ require(['jquery','jquery.tmpl'], function($) {
 		$('#J_show_data').empty();
 
 		this.pms.done(function(data) {
-			console.log(data);
 			var inspector = new InspectorJSON({
 				element : 'J_show_data',
 				json  : data
@@ -190,8 +189,6 @@ require(['jquery','jquery.tmpl'], function($) {
 	$('#J_params_reset').on('click',function(){
 		$('.params-wrap input').val('');
 	});
-
-
 
 	
 });
