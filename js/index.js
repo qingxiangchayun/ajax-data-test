@@ -11,7 +11,7 @@ require(['jquery','jquery.tmpl'], function($) {
 		'<li class="list">',
 			'<input type="text" value="${key}" class="key form-control" placeholder="key" />',
 			'<input type="text" value="${value}" class="value form-control" placeholder="value" />',
-			'<input type="checkbox" value="" checked />',
+			'<input type="checkbox" value="" {{if isChecked}}checked{{/if}} />',
 			'<a class="del-btn" href="javascript:;">删除</a>',
 		'</li>'
 	].join('');
@@ -21,7 +21,6 @@ require(['jquery','jquery.tmpl'], function($) {
 
 		// 获取本地保存的数据
 		var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
-
 
 		// config 数据
 		if (pageData) {
@@ -37,9 +36,10 @@ require(['jquery','jquery.tmpl'], function($) {
 			// single data
 			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-single ul');
 			
-
 			// multiple data
-			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-multiple ul');
+			$.tmpl(htmlTmpl,pageData.data.multipleData.list).appendTo('.params-wrap-multiple ul');
+
+			$('.params-wrap-multiple .multiple-key-list .key').val(pageData.data.multipleData.name);
 
 		}
 
@@ -73,60 +73,68 @@ require(['jquery','jquery.tmpl'], function($) {
 		};
 
 		// 用于关联本地存储数据和ajax配置数据 storageData.config = config = ajaxConfig中的config部分
-		var config = {};
+		var config = {
+
+		};
 
 		// 配置数据
 		config.url = $('.section-config input[name="url"]').val();
 		config.type = $('.section-config .sc-type input:checked').val();
 		config.dataType = $('.section-config input[name="dataType"]').val();
+		config.jsonp = $('.section-config input[name="jsonp"]').val();
 
 		storageData.config = config;
 
 		$.extend(ajaxConfig,config);
 
+		
 		$('.params-wrap-single li').each(function() {
 			var $this = $(this);
-			var key, value;
+
 			var obj = {};
 
+			var key = $this.find('.key').val();
+			var value = $this.find('.value').val();
+			var isChecked = $this.find('input[type="checkbox"]').prop('checked');
 
-			if ($this.find('input[type="checkbox"]').prop('checked')) {
-				key = $this.find('.key').val();
+			obj.key = key;
+			obj.value = value;
+			obj.isChecked = isChecked;
 
-				if ($.trim(key)) {
-					value = $this.find('.value').val();
+			storageData.data.singleData.list.push(obj);
 
-					ajaxConfig.data[key] = value;
-					
-					obj.key = key;
-					obj.value = value;
-					storageData.data.singleData.list.push(obj);
-				}
+			if (isChecked && $.trim(key) ) {
+				ajaxConfig.data[key] = value;
 			}
 		});
 
 		// 真实的multipleKeyName值
 		var multipleKeyName = storageData.data.multipleData.name = $('.params-wrap-multiple .multiple-key-list .key').val();
+		var multipleKeyChecked = $('.params-wrap-multiple .multiple-key-list input[type="checkbox"]').prop('checked');
+		var multipleDataList = [];
 
 		$('.params-wrap-multiple .list').each(function() {
 			var $this = $(this);
-			var key, value;
-			var obj = {};
+			var objForStorage = {};
+			var objForAjax = {};
 
-			if ($this.find('input[type="checkbox"]').prop('checked')) {
-				key = $this.find('.key').val();
+			var key = $this.find('.key').val();
+			var value = $this.find('.value').val();
+			var isChecked = $this.find('input[type="checkbox"]').prop('checked');
 
-				if ($.trim(key)) {
+			objForStorage.key = key;
+			objForStorage.value = value;
+			objForStorage.isChecked = isChecked;
 
-					value = $this.find('.value').val();
-					
-					obj.key = key;
-					obj.value = value;
+			storageData.data.multipleData.list.push(objForStorage);
 
-					storageData.data.multipleData.list.push(obj);
-					ajaxConfig.data[multipleKeyName] = JSON.stringify(storageData.data.multipleData.list);
-				}
+			// ajax要发送的数据  验证要严格一些
+			if ($.trim(multipleKeyName) && multipleKeyChecked  && isChecked && $.trim(key) ) {
+				objForAjax.key = key;
+				objForAjax.value = value;
 
+				multipleDataList.push(objForAjax);
+				ajaxConfig.data[multipleKeyName] = JSON.stringify(multipleDataList);
 			}
 
 		});
@@ -146,6 +154,7 @@ require(['jquery','jquery.tmpl'], function($) {
 		$('#J_show_data').empty();
 
 		this.pms.done(function(data) {
+			console.log(data);
 			var inspector = new InspectorJSON({
 				element : 'J_show_data',
 				json  : data
