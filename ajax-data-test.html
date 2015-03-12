@@ -7,6 +7,7 @@
 <meta name="author" content="lyuan">
 <link rel="icon" href="/img/favicon.ico">
 <link rel='stylesheet' href='css/bootstrap.css' />
+<link rel='stylesheet' href='css/inspector-json.css' />
 
 <style type="text/css">
 ul,li{list-style:none;}
@@ -28,14 +29,21 @@ ul,li{list-style:none;}
 
 .section-params{min-height:230px;background:#eee;}
 .section-params h4{text-align:center;}
+.section-params h4 a{margin-left:20px;}
 
-.section-params .params-wrap{width:700px;}
+.section-params .params-wrap{width:750px;}
 .section-params li{margin-bottom:10px;}
+.section-params .list input[type="checkbox"]{margin:0 15px 0 0;vertical-align:middle;}
+
 .section-params input[type="text"]{width:300px;margin-right:20px;}
 .params-wrap-single{float:left;}
-.params-wrap-multiple{float:left;margin-left:30px;}
+.params-wrap-multiple{float:right;}
 
 .section-action{background:#efe;}
+.section-action .btn{margin-left:40px;}
+
+.section-result{background:#fff;}
+
 
 </style>
 </head>
@@ -60,11 +68,15 @@ ul,li{list-style:none;}
 <section class="section section-params clearfix">
 	<h3>参数设置</h3>
 	<div class="params-wrap params-wrap-single">
-		<h4>简单值：orgId:123, courseId:456</h4>
+		<h4>简单值：orgId:123, courseId:456  
+			<a class="add-btn" data-type="single" href="javascript:;">添加</a>
+		</h4>
 		<ul></ul>
 	</div>
 	<div class="params-wrap params-wrap-multiple">
-		<h4>复杂值：jsonStr: [{courseId:123, coursePic:a.jpg, coursePrice:1}]</h4>
+		<h4>复杂值：jsonStr: [{courseId:123, coursePic:a.jpg, coursePrice:1}]
+			<a class="add-btn" data-type="multiple" href="javascript:;">添加</a>
+		</h4>
 		<ul>
 			<li class="multiple-key-list">
 				<input type="text" value="" class="key form-control" placeholder="key" /> 
@@ -75,11 +87,17 @@ ul,li{list-style:none;}
 </section>
 <section class="section section-action">
 	<h3>操作</h3>
-	<button id="J_data_validate" class="btn btn-primary" type="button">确定</button>
+	<button id="J_data_validate" class="btn btn-primary" type="button">验证接口</button>
+	<button id="J_params_reset" class="btn btn-primary" type="button">重置参数设置</button>
+</section>
+<section class="section section-result">
+	<h3>结果</h3>
+	<div id="J_show_data" class="show-data"></div>
 </section>
 
 <script></script>
 
+<script type="text/javascript" src="js/inspector-json.js"></script>
 <script src="js/require-jquery.js" data-main="js/index.js"></script>
 
 </body>

@@ -6,9 +6,46 @@
 require(['jquery','jquery.tmpl'], function($) {
 
 	'use strict';
-	console.time(1)
-	console.time(2)
 
+	var htmlTmpl = [
+		'<li class="list">',
+			'<input type="text" value="${key}" class="key form-control" placeholder="key" />',
+			'<input type="text" value="${value}" class="value form-control" placeholder="value" />',
+			'<input type="checkbox" value="" checked />',
+			'<a class="del-btn" href="javascript:;">删除</a>',
+		'</li>'
+	].join('');
+
+	// page load 
+	var pageLoad = (function() {
+
+		// 获取本地保存的数据
+		var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
+
+
+		// config 数据
+		if (pageData) {
+			$('.section-config input[name="url"]').val(pageData.config.url);
+			$('.section-config input[name="dataType"]').val(pageData.config.dataType);
+
+			if (pageData.config.type === 'GET') {
+				$('.section-config .sc-type input').eq(0).prop('checked', true);
+			} else {
+				$('.section-config .sc-type input').eq(1).prop('checked', true);
+			}
+
+			// single data
+			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-single ul');
+			
+
+			// multiple data
+			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-multiple ul');
+
+		}
+
+	})();
+
+	
 	// 验证接口
 	$('#J_data_validate').on('click', function() {
 
@@ -43,6 +80,8 @@ require(['jquery','jquery.tmpl'], function($) {
 		config.dataType = $('.section-config input[name="dataType"]').val();
 
 		storageData.config = config;
+
+		$.extend(ajaxConfig,config);
 
 		$('.params-wrap-single li').each(function() {
 			var $this = $(this);
@@ -96,52 +135,41 @@ require(['jquery','jquery.tmpl'], function($) {
 
 		this.pms = $.ajax(ajaxConfig);
 
-		this.pms.done(function() {
-			console.log('ok');
+		this.pms.done(function(data) {
+			var inspector = new InspectorJSON({
+				element : 'J_show_data',
+				json  : data
+			});
+
 		});
 
 	});
 
-	console.timeEnd(1)
 
-	var pageLoad = (function() {
+	// add
+	$('.section-params').on('click','.add-btn',function(){
+		var $this = $(this);
 
-		// 获取本地保存的数据
-		console.time(3)
-		var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
-		
-		
+		var $target = $(this).parents('.params-wrap-single').find('ul');
 
-		var htmlTmpl = [
-			'<li class="list">',
-				'<input type="text" value="${key}" class="key form-control" placeholder="key" />',
-				'<input type="text" value="${value}" class="value form-control" placeholder="value" />',
-				'<input type="checkbox" value="" checked />',
-			'</li>'
-		].join('');
-
-
-		// config 数据
-		if (pageData) {
-			$('.section-config input[name="url"]').val(pageData.config.url);
-			$('.section-config input[name="dataType"]').val(pageData.config.dataType);
-
-			if (pageData.config.type === 'GET') {
-				$('.section-config .sc-type input').eq(0).prop('checked', true);
-			} else {
-				$('.section-config .sc-type input').eq(1).prop('checked', true);
-			}
-
-			// single data
-			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-single ul');
-			
-
-			// multiple data
-			$.tmpl(htmlTmpl,pageData.data.singleData.list).appendTo('.params-wrap-multiple ul');
-
+		if($this.data('type') === 'multiple'){
+			$target = $(this).parents('.params-wrap-multiple').find('ul');
 		}
 
-	})();
-	console.timeEnd(2)
+		$.tmpl(htmlTmpl,{}).appendTo($target);
+	});
+	
+	// delete
+	$('.section-params').on('click','.del-btn',function(){
+		$(this).parent('.list').remove();
+	});
 
+	// reset
+	$('#J_params_reset').on('click',function(){
+		$('.params-wrap input').val('');
+	});
+
+
+
+	
 });
