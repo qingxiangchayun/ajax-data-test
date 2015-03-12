@@ -48,6 +48,7 @@ require(['jquery','jquery.tmpl'], function($) {
 	
 	// 验证接口
 	$('#J_data_validate').on('click', function() {
+		var $this = $(this);
 
 		// 本地要存储的数据
 		var storageData = {
@@ -133,14 +134,26 @@ require(['jquery','jquery.tmpl'], function($) {
 		// 数据写到 localStorage上
 		window.localStorage.setItem('ajax-data-test', JSON.stringify(storageData));
 
+		if(this.pms && this.pms.state() === 'pendding'){
+			return;
+		}
+
 		this.pms = $.ajax(ajaxConfig);
+
+		
+		// 请求发出去之后置灰按钮
+		$this.prop('disabled',true);
+		$('#J_show_data').empty();
 
 		this.pms.done(function(data) {
 			var inspector = new InspectorJSON({
 				element : 'J_show_data',
 				json  : data
 			});
+		});
 
+		this.pms.always(function(){
+			$this.prop('disabled',false);
 		});
 
 	});
