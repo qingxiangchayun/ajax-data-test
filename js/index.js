@@ -195,6 +195,5 @@ require(['jquery','jquery.tmpl'], function($) {
 	$('#J_params_reset').on('click',function(){
 		$('.params-wrap input').val('');
 	});
-
 	
 });
