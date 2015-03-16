@@ -21,7 +21,7 @@ require(['jquery','jquery.tmpl'], function($) {
 
 		// 获取本地保存的数据
 		var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
-
+		console.log(pageData)
 		// config 数据
 		if (pageData) {
 			$('.section-config input[name="url"]').val(pageData.config.url);
@@ -41,6 +41,10 @@ require(['jquery','jquery.tmpl'], function($) {
 
 			$('.params-wrap-multiple .multiple-key-list .key').val(pageData.data.multipleData.name);
 
+		}else{
+			// 初始化数据
+			$.tmpl(htmlTmpl,[{},{},{}]).appendTo('.params-wrap-single ul');
+			$.tmpl(htmlTmpl,[{},{}]).appendTo('.params-wrap-multiple ul');
 		}
 
 	})();
@@ -150,10 +154,12 @@ require(['jquery','jquery.tmpl'], function($) {
 
 		
 		// 请求发出去之后置灰按钮
-		$this.prop('disabled',true);
+		$this.html('验证接口...').prop('disabled',true);
 		$('#J_show_data').empty();
 
 		this.pms.done(function(data) {
+			$this.html('正在验证...')
+
 			var inspector = new InspectorJSON({
 				element : 'J_show_data',
 				json  : data
