@@ -17,15 +17,19 @@ require(['jquery','jquery.tmpl'], function($) {
 	].join('');
 
 	// page load 
-	var pageLoad = (function() {
+	function pageLoad() {
 
 		// 获取本地保存的数据
 		var pageData = JSON.parse(localStorage.getItem('ajax-data-test'));
-		console.log(pageData)
+
+		// for demo
+		$('.section-params .list').remove();
+		
 		// config 数据
 		if (pageData) {
 			$('.section-config input[name="url"]').val(pageData.config.url);
 			$('.section-config input[name="dataType"]').val(pageData.config.dataType);
+			$('.section-config input[name="jsonp"]').val(pageData.config.jsonp);
 
 			if (pageData.config.type === 'GET') {
 				$('.section-config .sc-type input').eq(0).prop('checked', true);
@@ -47,8 +51,8 @@ require(['jquery','jquery.tmpl'], function($) {
 			$.tmpl(htmlTmpl,[{},{}]).appendTo('.params-wrap-multiple ul');
 		}
 
-	})();
-
+	};
+	pageLoad();
 	
 	// 验证接口
 	$('#J_data_validate').on('click', function() {
@@ -77,9 +81,7 @@ require(['jquery','jquery.tmpl'], function($) {
 		};
 
 		// 用于关联本地存储数据和ajax配置数据 storageData.config = config = ajaxConfig中的config部分
-		var config = {
-
-		};
+		var config = {};
 
 		// 配置数据
 		config.url = $('.section-config input[name="url"]').val();
@@ -90,7 +92,6 @@ require(['jquery','jquery.tmpl'], function($) {
 		storageData.config = config;
 
 		$.extend(ajaxConfig,config);
-
 		
 		$('.params-wrap-single li').each(function() {
 			var $this = $(this);
@@ -158,16 +159,19 @@ require(['jquery','jquery.tmpl'], function($) {
 		$('#J_show_data').empty();
 
 		this.pms.done(function(data) {
-			$this.html('正在验证...')
+			try{
+				var inspector = new InspectorJSON({
+					element : 'J_show_data',
+					json  : data
+				});
+			}catch(e){
+				alert(e);
+			}
 
-			var inspector = new InspectorJSON({
-				element : 'J_show_data',
-				json  : data
-			});
 		});
 
 		this.pms.always(function(){
-			$this.prop('disabled',false);
+			$this.html('验证接口').prop('disabled',false);
 		});
 
 	});
@@ -195,5 +199,51 @@ require(['jquery','jquery.tmpl'], function($) {
 	$('#J_params_reset').on('click',function(){
 		$('.params-wrap input').val('');
 	});
-	
+
+	// show demo 写入数据-->执行pageLoad方法-->执行validate方法 --> reset数据
+	$('#J_show_demo').on('click',function(){
+		var demoData = {
+			config: {
+				url: 'http://www.ablesky.com/s/sw.do',
+				type: 'GET',
+				dataType : 'jsonp',
+				jsonp : 'jsonp'
+			},
+			data: {
+				singleData: {
+					list: [{
+						key : 'type',
+						value : 'Course',
+						isChecked : true
+					},{
+						key : 'key',
+						value : 'ablesky',
+						isChecked : true
+					}]
+				},
+				multipleData: {
+					name: 'jsonStr',
+					list: [{
+						key : 'demo',
+						value : 'demo-value',
+						isChecked : true
+					},{
+						key : 'demo',
+						value : 'demo-value',
+						isChecked : true
+					}]
+				}
+			}
+		};
+
+		window.localStorage.setItem('ajax-data-test', JSON.stringify(demoData));
+		
+		pageLoad();
+		
+		$('#J_data_validate').trigger('click');
+		
+		window.localStorage.removeItem('ajax-data-test');
+
+	});
+
 });
